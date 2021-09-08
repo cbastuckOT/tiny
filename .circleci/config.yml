@@ -1,15 +1,26 @@
 version: 2.1
 
+commands:
+  cmd_write_manifest:
+    description: "Create a manifest file"
+    parameters:
+      filename:
+        type: string
+        default: "./manifest.txt"
+    steps:
+      - run: 'echo "Repo: << pipeline.project.git_url >>"  > << parameters.filename >>'
+      - run: 'echo "Branchname: << pipeline.git.branch >>" >> << parameters.filename >>'
+      - run: 'echo "SHA: << pipeline.git.revision >> " >> << parameters.filename >>'
+      - run: 'echo "Build: $CIRCLE_BUILD_URL" >> << parameters.filename >>'
+
 jobs:
   build:
     docker:
       - image: mhart/alpine-node
     steps:
       - checkout
-      - run: 'echo "Repo: << pipeline.project.git_url >>"  > ./manifest.txt'
-      - run: 'echo "Branchname: << pipeline.git.branch >>" >> ./manifest.txt'
-      - run: 'echo "SHA: << pipeline.git.revision >> " >> ./manifest.txt'
-      - run: 'echo "Build: $CIRCLE_BUILD_URL" >> ./manifest.txt'  
+      - cmd_write_manifest:
+          filename: ./manifest.txt
       - store_artifacts:
           path: ./manifest.txt
 
