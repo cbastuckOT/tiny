@@ -4,12 +4,12 @@ jobs:
   build:
     docker:
       - image: mhart/alpine-node
-    environment:
-      MANIFEST: << pipeline.project.git_url >> - << pipeline.git.revision >>
     steps:
       - checkout
-      - run: echo $MANIFEST > ./manifest.txt
-      - run: echo "<< pipeline.git.branch >>" >> ./manifest.txt
+      - run: 'echo "Repo: << pipeline.project.git_url >>"  > ./manifest.txt'
+      - run: 'echo "Branchname: << pipeline.git.branch >>" >> ./manifest.txt'
+      - run: 'echo "SHA: << pipeline.git.revision >> " >> ./manifest.txt'
+      - run: 'echo "Build: $CIRCLE_BUILD_URL" >> ./manifest.txt'  
       - store_artifacts:
           path: ./manifest.txt
 
