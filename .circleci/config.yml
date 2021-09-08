@@ -1,0 +1,19 @@
+version: 2.1
+
+jobs:
+  build:
+    docker:
+      - image: mhart/alpine-node
+    environment:
+      MANIFEST: << pipeline.project.git_url >> - << pipeline.git.revision >>
+    steps:
+      - checkout
+      - run: echo $MANIFEST > ./manifest.txt
+      - run: echo "<< pipeline.git.branch >>" >> ./manifest.txt
+      - store_artifacts:
+          path: ./manifest.txt
+
+workflows:
+  build:
+    jobs:
+      - build
