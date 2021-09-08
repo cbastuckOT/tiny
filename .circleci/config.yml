@@ -8,10 +8,11 @@ commands:
         type: string
         default: "./manifest.txt"
     steps:
-      - run: 'echo "Repo: << pipeline.project.git_url >>"  > << parameters.filename >>'
+      - run: 'echo "Repository: << pipeline.project.git_url >>"  > << parameters.filename >>'
       - run: 'echo "Branchname: << pipeline.git.branch >>" >> << parameters.filename >>'
-      - run: 'echo "SHA: << pipeline.git.revision >> " >> << parameters.filename >>'
-      - run: 'echo "Build: $CIRCLE_BUILD_URL" >> << parameters.filename >>'
+      - run: 'echo "Commit SHA: << pipeline.git.revision >> " >> << parameters.filename >>'
+      - run: 'echo "CircleCI Build-URL: $CIRCLE_BUILD_URL" >> << parameters.filename >>'
+      - run: 'echo "PR: $CIRCLE_PULL_REQUEST" >> << parameters.filename >>'
 
 jobs:
   build:
