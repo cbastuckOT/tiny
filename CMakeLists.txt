@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.21)
 project(test)
 
-file (READ version.txt VERSION)
-message ("Read version ${VERSION}")
+set (VERSION "0.0.0.1")
+file(WRITE version.txt ${VERSION})
 
 add_executable (test-${VERSION} main.cpp)

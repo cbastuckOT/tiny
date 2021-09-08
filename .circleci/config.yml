@@ -28,9 +28,9 @@ jobs:
       - cmd_write_manifest:
           manifestFile: ./manifest.txt
           versionFile: ./version.txt
-      - run: tar -zcvf build-<< pipeline.git.revision >>.tar.gz ./build/test* ./manifest.txt
+      - run: tar -zcvf pipeline-<< pipeline.number >>-<< pipeline.git.revision >>.tar.gz ./build/test* ./manifest.txt
       - store_artifacts:
-          path: ./build-<< pipeline.git.revision >>.tar.gz
+          path: ./pipeline-<< pipeline.number >>-<< pipeline.git.revision >>.tar.gz
 
 workflows:
   build:
