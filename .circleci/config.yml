@@ -4,26 +4,33 @@ commands:
   cmd_write_manifest:
     description: "Create a manifest file"
     parameters:
-      filename:
+      manifestFile:
         type: string
         default: "./manifest.txt"
+      versionFile:
+        type: string
     steps:
-      - run: 'echo "Repository: << pipeline.project.git_url >>"  > << parameters.filename >>'
-      - run: 'echo "Branchname: << pipeline.git.branch >>" >> << parameters.filename >>'
-      - run: 'echo "Commit SHA: << pipeline.git.revision >> " >> << parameters.filename >>'
-      - run: 'echo "CircleCI Build-URL: $CIRCLE_BUILD_URL" >> << parameters.filename >>'
-      - run: 'echo "PR: $CIRCLE_PULL_REQUEST" >> << parameters.filename >>'
+      - run: 'echo "Repository: << pipeline.project.git_url >>"  > << parameters.manifestFile >>'
+      - run: 'echo "Branchname: << pipeline.git.branch >>" >> << parameters.manifestFile >>'
+      - run: 'echo "Commit SHA: << pipeline.git.revision >> " >> << parameters.manifestFile >>'
+      - run: 'echo "CircleCI Build-URL: $CIRCLE_BUILD_URL" >> << parameters.manifestFile >>'
+      - run: 'echo "Pull request: $CIRCLE_PULL_REQUEST" >> << parameters.manifestFile >>'
+      - run: 'echo -n "Version: " | cat - << parameters.versionFile >> >> << parameters.manifestFile >>'
 
 jobs:
   build:
     docker:
-      - image: mhart/alpine-node
+      - image: rikorose/gcc-cmake
     steps:
       - checkout
+      - run: cmake -S . -B build
+      - run: cmake --build build --config Release --parallel 2
       - cmd_write_manifest:
-          filename: ./manifest.txt
+          manifestFile: ./manifest.txt
+          versionFile: ./version.txt
+      - run: tar -zcvf build-<< pipeline.git.revision >>.tar.gz ./build/test* ./manifest.txt
       - store_artifacts:
-          path: ./manifest.txt
+          path: ./build-<< pipeline.git.revision >>.tar.gz
 
 workflows:
   build:
