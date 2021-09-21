@@ -41,7 +41,7 @@ jobs:
   
   deploy:
     docker:
-      - image: alpine
+      - image: rikorose/gcc-cmake
     steps:
       - attach_workspace:
           at: /tmp/workspace
