@@ -41,7 +41,7 @@ jobs:
   
   deploy:
     docker:
-      - image: ubuntu
+      - image: amazonlinux
     steps:
       - attach_workspace:
           at: /tmp/workspace
