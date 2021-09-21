@@ -35,7 +35,7 @@ jobs:
       - store_artifacts:
           path: ./pipeline-<< pipeline.number >>-<< pipeline.git.revision >>.tar.gz
       - persist_to_workspace:
-          root: /tmp/workspace
+          root: .
           paths:
             - ./pipeline-<< pipeline.number >>-<< pipeline.git.revision >>.tar.gz
   
