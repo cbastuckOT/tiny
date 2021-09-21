@@ -1,5 +1,8 @@
 version: 2.1
 
+orbs:
+  aws-s3: circleci/aws-s3@3.0.0
+
 commands:
   cmd_write_manifest:
     description: "Create a manifest file"
@@ -31,6 +34,9 @@ jobs:
       - run: tar -zcvf pipeline-<< pipeline.number >>-<< pipeline.git.revision >>.tar.gz ./build/test* ./manifest.txt
       - store_artifacts:
           path: ./pipeline-<< pipeline.number >>-<< pipeline.git.revision >>.tar.gz
+      - aws-s3/copy:
+          from: ./pipeline-<< pipeline.number >>-<< pipeline.git.revision >>.tar.gz
+          to: 's3://c360-ci-artifacts'
 
 workflows:
   build:
