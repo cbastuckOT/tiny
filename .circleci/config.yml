@@ -23,7 +23,7 @@ commands:
 jobs:
   build:
     docker:
-      - image: rikorose/gcc-cmake
+      - image: bash
     steps:
       - checkout
       - run: cmake -S . -B build
