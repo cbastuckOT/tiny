@@ -46,8 +46,8 @@ jobs:
       - image: python:3.8
     steps:
       - attach_workspace:
-          at: /tmp/workspace
-      - run: tar -cvf ./artifacts-<< pipeline.number >>.tar /tmp/workspace
+          at: /build-artifacts-<< pipeline.number >>
+      - run: tar -cvf ./artifacts-<< pipeline.number >>.tar /build-artifacts-<< pipeline.number >>
       - aws-s3/copy:
           from: ./artifacts-<< pipeline.number >>.tar
           to: 's3://c360-ci-artifacts'
