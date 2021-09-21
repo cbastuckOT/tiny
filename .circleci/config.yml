@@ -41,7 +41,7 @@ jobs:
   
   deploy:
     docker:
-      - image: bash
+      - image: ubuntu
     steps:
       - attach_workspace:
           at: /tmp/workspace
