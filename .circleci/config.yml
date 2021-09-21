@@ -34,11 +34,23 @@ jobs:
       - run: tar -zcvf pipeline-<< pipeline.number >>-<< pipeline.git.revision >>.tar.gz ./build/test* ./manifest.txt
       - store_artifacts:
           path: ./pipeline-<< pipeline.number >>-<< pipeline.git.revision >>.tar.gz
+      - persist_to_workspace:
+          root: /tmp/workspace
+          paths:
+            - ./pipeline-<< pipeline.number >>-<< pipeline.git.revision >>.tar.gz
+  
+  deploy:
+    docker:
+      - image: alpine
+    steps:
+      - attach_workspace:
+          at: /tmp/workspace
       - aws-s3/copy:
-          from: ./pipeline-<< pipeline.number >>-<< pipeline.git.revision >>.tar.gz
+          from: /tmp/workspace/pipeline-<< pipeline.number >>-<< pipeline.git.revision >>.tar.gz
           to: 's3://c360-ci-artifacts'
 
 workflows:
   build:
     jobs:
       - build
+      - deploy
