@@ -23,7 +23,7 @@ commands:
 jobs:
   build:
     docker:
-      - image: bash
+      - image: rikorose/gcc-cmake
     steps:
       - checkout
       - run: cmake -S . -B build
@@ -41,7 +41,7 @@ jobs:
   
   deploy:
     docker:
-      - image: rikorose/gcc-cmake
+      - image: bash
     steps:
       - attach_workspace:
           at: /tmp/workspace
