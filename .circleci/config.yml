@@ -38,6 +38,8 @@ jobs:
           root: .
           paths:
             - ./pipeline-<< pipeline.number >>-<< pipeline.git.revision >>.tar.gz
+            - ./version.txt
+            - ./manifest.txt
   
   deploy:
     docker:
@@ -45,8 +47,9 @@ jobs:
     steps:
       - attach_workspace:
           at: /tmp/workspace
+      - run: tar -cvf ./artifacts-<< pipeline.number >>.tar /tmp/workspace
       - aws-s3/copy:
-          from: /tmp/workspace/pipeline-<< pipeline.number >>-<< pipeline.git.revision >>.tar.gz
+          from: ./artifacts-<< pipeline.number >>.tar
           to: 's3://c360-ci-artifacts'
 
 workflows:
